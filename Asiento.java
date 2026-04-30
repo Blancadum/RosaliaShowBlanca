@@ -1,82 +1,124 @@
 
 public class Asiento {
-    // Declaración de los 5 atributos privados
-    private int fila;
-    private int numero;
-    private String seccion;
-    private double precio;
-    private boolean disponible;
+    // ================================================================================
+    //  🔒 ATRIBUTOS PRIVADOS 🔒: ENCAPSULACIÓN (🔑 Clase Asiento)
+    // ================================================================================
+    // Estos datos están en una "CAJA FUERTE" 🔒
+    // Solo esta clase (Asiento) puede acceder 🔑
+    // Otras clases NO pueden hacer: asiento.precio = -500 
+    //
+    // ANALOGÍA DEL MUNDO REAL:
+    // Como un CAJERO AUTOMÁTICO:
+    // - Tú NO accedes directamente al dinero (private)
+    // - Solo usas BOTONES seguros (métodos public)
+    // - Si intentas: cajero.dinero = -500 → ❌ BLOQUEADO
+    // - Debes usar: cajero.sacarDinero(100) → ✅ PERMITIDO
+    //
+    // Cada asiento tiene 5 características:
+    // - Fila (A-J) y Número (0-7) → NO CAMBIAN después de crear
+    // - Sección (VIP, Premium, Normal) → NO CAMBIA
+    // - Precio (€) → NO CAMBIA después de crear
+    // - Disponibilidad → SÍ CAMBIA (compra → cancelación)
+    //
+    private int fila;           // 0-9 (A-J) - INMUTABLE después de crear
+    private int numero;         // 0-7 - INMUTABLE después de crear
+    private String seccion;     // "VIP", "Premium", "Normal" - INMUTABLE
+    private double precio;      // € - INMUTABLE después de crear
+    private boolean disponible; // true=libre, false=vendida - MUTABLE
 
     // ================================================
-    // PASO 1.1: Constructor - Inicializar un asiento
+    // PASO 1.1: CONSTRUCTOR - Inicializar un asiento
     // ================================================
     // ¿POR QUÉ?
-    // Cada asiento tiene 5 características únicas que NUNCA cambiarán:
-    // - Fila (A, B, C...) → número 0, 1, 2...
-    // - Número (1, 2, 3...)
-    // - Sección (VIP, General, Preferente...)
-    // - Precio (cada sección cuesta diferente)
-    // - Disponibilidad (al crear, SIEMPRE está disponible)
+    // Necesitamos una forma de crear asientos COMPLETOS y VÁLIDOS.
+    // No podemos tener asientos "medio creados" o con datos faltantes.
     //
     // ¿PARA QUÉ?
-    // Necesitamos una forma de crear asientos completos con datos válidos.
-    // No podemos tener un asiento "vacío" sin saber dónde está o cuánto cuesta.
+    // El constructor es como un FORMULARIO en una web:
+    // - Pide los datos que NECESITA (fila, numero, seccion, precio)
+    // - Valida que sean correctos (no acepta basura)
+    // - Crea el objeto de forma SEGURA
     //
     // ¿CÓMO FUNCIONA?
     // 1. Recibe 4 parámetros: fila, numero, seccion, precio
-    // 2. Guarda cada parámetro en su atributo correspondiente usando "this."
-    // 3. El disponible NO viene como parámetro porque SIEMPRE es true al crear
+    //    (¿Por qué 4 y no 5? Porque disponible SIEMPRE es true al crear)
+    // 2. Guarda cada parámetro en su atributo con "this."
+    // 3. Inicializa disponible = true automáticamente
+    //
+    // ANALOGÍA: Como rellenar una FICHA DE REGISTRO:
+    // - Campo requerido: Fila ________________
+    // - Campo requerido: Número ______________
+    // - Campo requerido: Sección ______________
+    // - Campo requerido: Precio _______________
+    // - Campo AUTOMÁTICO: Disponible = SÍ (no se pregunta)
     //
     // ¿EJEMPLO?
     // Asiento a1 = new Asiento(0, 2, "VIP", 85.0);
-    // → fila=0, numero=2, seccion="VIP", precio=85.0, disponible=true
+    // → Crea: fila=0, numero=2, seccion="VIP", precio=85.0, disponible=true
     //
-    // Asiento a2 = new Asiento(3, 15, "General", 35.0);
-    // → fila=3, numero=15, seccion="General", precio=35.0, disponible=true
+    // Asiento a2 = new Asiento(3, 5, "Premium", 65.0);
+    // → Crea: fila=3, numero=5, seccion="Premium", precio=65.0, disponible=true
+    //
+    // ¿PASO A PASO?
+    // 1. Guardar los 4 parámetros en sus atributos: this.fila = fila
+    // 2. Guardar numero, seccion, precio igual
+    // 3. Inicializar disponible a true (automático, no viene como parámetro)
     //
     public Asiento(int fila, int numero, String seccion, double precio) {
         this.fila = fila;
         this.numero = numero;
         this.seccion = seccion;
         this.precio = precio;
-        this.disponible = true;
+        this.disponible = true;  // Siempre true, porque es un asiento nuevo
     }
 
     // ================================================
-    // PASO 1.2: Los 5 Getters - Obtener información
+    // PASO 1.2: GETTERS - Leer datos de forma SEGURA
     // ================================================
     // ¿POR QUÉ?
-    // Los atributos son PRIVATE (privados) → nadie puede acceder directamente.
-    // Si Concierto quiere saber el precio de un asiento, NO puede hacer asiento.precio
-    // Necesita un método público que LE PERMITA leerlo de forma controlada.
+    // Los atributos son PRIVATE → nadie puede acceder directamente.
+    // asiento.precio ❌ NO FUNCIONA
+    // Necesita un "PORTERO" que PERMITA lectura segura.
     //
-    // ¿PARA QUÉ?
-    // - getFila() → saber en qué fila está el asiento
-    // - getNumero() → saber el número del asiento
-    // - getSeccion() → saber a qué sección pertenece
-    // - getPrecio() → cobrar el precio correcto
-    // - isDisponible() → saber si se puede comprar
+    // ANALOGÍA: Como pedir información al MOSTRADOR DE UN BANCO:
+    // - Tú NO entras a la bóveda (private atributos)
+    // - PREGUNTAS al mostrador (public getters)
+    // - El mostrador TE DICE la información (return)
+    // - Ejemplo: "¿Cuál es mi saldo?"
+    //           Mostrador: "Tu saldo es 1000€"
+    //
+    // ¿PARA QUÉ CADA UNO?
+    // - getFila() → ¿En qué fila está? (para mostrar A, B, C...)
+    // - getNumero() → ¿Cuál es el número? (para mostrar 0, 1, 2...)
+    // - getSeccion() → ¿Qué sección? (VIP, Premium, Normal)
+    // - getPrecio() → ¿Cuánto cuesta? (para cobrar)
+    // - isDisponible() → ¿Puedo comprarlo? (true=sí, false=no)
     //
     // ¿CÓMO FUNCIONA?
     // Cada getter:
-    // 1. Es un método público (cualquiera puede llamarlo)
-    // 2. NO recibe parámetros
-    // 3. DEVUELVE el valor del atributo (return)
-    // 4. El tipo de return coincide con el atributo (int, String, boolean, double)
+    // 1. Es PUBLIC (cualquiera puede llamarlo)
+    // 2. NO tiene parámetros
+    // 3. Devuelve (return) el valor del atributo
+    // 4. El tipo de return COINCIDE con el atributo
     //
-    // ¿PATRÓN PARA GETTERS?
-    // - Si atributo es int → "public int getNombreAtributo() { return nombreAtributo; }"
-    // - Si atributo es String → "public String getNombreAtributo() { return nombreAtributo; }"
-    // - Si atributo es boolean → "public boolean isNombreAtributo() { return nombreAtributo; }"
-    // NOTA: Para booleanos usamos "is" en lugar de "get"
+    // ¿PATRÓN?
+    // - Si atributo es int: public int getNombre() { return nombre; }
+    // - Si atributo es String: public String getNombre() { return nombre; }
+    // - Si atributo es boolean: public boolean isNombre() { return nombre; }
+    // NOTA: Para boolean usamos "is" en lugar de "get"
+    //
+    // ABSTRACCIÓN: No necesitas saber CÓMO se calcula, solo USAS el método:
+    // - No importa si fila está en un int o un char
+    // - No importa si disponible se calcula o se almacena
+    // - Solo llamas: asiento.getFila() y recibes el resultado
     //
     // ¿EJEMPLO?
     // Asiento a = new Asiento(0, 2, "VIP", 85.0);
-    // int f = a.getFila();        // f = 0
-    // int n = a.getNumero();      // n = 2
-    // String s = a.getSeccion();  // s = "VIP"
-    // double p = a.getPrecio();   // p = 85.0
-    // boolean d = a.isDisponible(); // d = true
+    // int fila = a.getFila();           // fila = 0
+    // int numero = a.getNumero();       // numero = 2
+    // String seccion = a.getSeccion();  // seccion = "VIP"
+    // double precio = a.getPrecio();    // precio = 85.0
+    // boolean disponible = a.isDisponible(); // disponible = true
     //
     public int getFila() { return fila; }
     public int getNumero() { return numero; }
@@ -85,33 +127,43 @@ public class Asiento {
     public boolean isDisponible() { return disponible; }
 
     // ================================================
-    // PASO 1.3: ocupar() - Marcar asiento como comprado
+    // PASO 1.3: ocupar() - Marcar asiento como vendido
     // ================================================
     // ¿POR QUÉ?
-    // Cuando un cliente compra una entrada, el asiento DEBE pasar de disponible
-    // a NO disponible. No podemos dejar que dos personas compren el mismo asiento.
+    // Cuando un cliente COMPRA una entrada, el asiento cambia de ESTADO:
+    // disponible = true  →  disponible = false
+    // No podemos dejar que dos personas compren el mismo asiento.
+    //
+    // ANALOGÍA: Como un ASIENTO DE AVIÓN:
+    // Paso 1: Asiento vacío (disponible = true)
+    // Paso 2: Persona se sienta (ocupar() → disponible = false)
+    // Paso 3: Nadie más puede sentarse ahí
     //
     // ¿PARA QUÉ?
     // - Cliente compra asiento A2 → ocupar() → disponible = false
-    // - Ahora nadie más puede comprar A2
-    // - Si intentan, isDisponible() devolverá false y rechazaremos la compra
+    // - Ahora si otro intenta comprar A2, dirá: "❌ Ocupado"
     //
     // ¿CÓMO FUNCIONA?
-    // - Es un método void (no devuelve nada)
-    // - Solo debe CAMBIAR el estado de disponible
+    // - Es un método void (no devuelve nada, solo HACE cosas)
+    // - Solo CAMBIA el estado de disponible
     // - De true a false
-    // - No recibe parámetros (el cambio es siempre el mismo)
+    // - No recibe parámetros (siempre hace lo mismo)
+    //
+    // ENCAPSULACIÓN: ocupar() controla CÓMO cambia el estado
+    // - No puedes hacer: asiento.disponible = false directamente
+    // - DEBES usar: asiento.ocupar()
+    // - Así el cambio está CONTROLADO
     //
     // ¿PASO A PASO?
-    // 1. Acessar el atributo disponible (que es private)
+    // 1. Acceder al atributo disponible (que es private)
     // 2. Cambiar su valor a false
     // 3. Listo, método terminado
     //
     // ¿EJEMPLO?
     // Asiento asiento = new Asiento(0, 2, "VIP", 85.0);
-    // System.out.println(asiento.isDisponible()); // true
-    // asiento.ocupar();
-    // System.out.println(asiento.isDisponible()); // false
+    // System.out.println(asiento.isDisponible()); // Imprime: true
+    // asiento.ocupar();  // Cambiar estado
+    // System.out.println(asiento.isDisponible()); // Imprime: false
     //
     // TODO: public void ocupar() {
     // TODO:     // Aquí: cambiar disponible a false
@@ -121,29 +173,36 @@ public class Asiento {
     // PASO 1.4: liberar() - Marcar asiento como disponible
     // ================================================
     // ¿POR QUÉ?
-    // Si un cliente cancela su compra o se devuelve una entrada,
-    // el asiento DEBE volver a estar disponible para que otro lo compre.
+    // Si un cliente CANCELA su compra, el asiento vuelve a estar DISPONIBLE.
+    // Para que otro cliente pueda comprarlo.
+    //
+    // ANALOGÍA: Como el ASIENTO DE AVIÓN nuevamente:
+    // Paso 1: Persona se levanta (liberar() → disponible = true)
+    // Paso 2: El asiento vuelve a estar disponible
+    // Paso 3: Otra persona SÍ puede sentarse
     //
     // ¿PARA QUÉ?
     // - Cliente cancela entrada → liberar() → disponible = true
-    // - Ahora otro cliente SÍ puede comprar A2
+    // - Ahora otro cliente SÍ puede comprar ese asiento
     //
     // ¿CÓMO FUNCIONA?
-    // - Es el OPUESTO de ocupar()
-    // - Si ocupar() pone false, liberar() pone true
+    // - Es el OPUESTO EXACTO de ocupar()
+    // - Si ocupar() → false, liberar() → true
     // - También es void, sin parámetros
+    // - Solo CAMBIA el estado
     //
     // ¿PASO A PASO?
     // 1. Acceder al atributo disponible
     // 2. Cambiar su valor a true
     // 3. Listo, método terminado
     //
-    // ¿EJEMPLO?
+    // ¿EJEMPLO DE CICLO COMPLETO?
     // Asiento asiento = new Asiento(0, 2, "VIP", 85.0);
-    // asiento.ocupar();  // Compra
-    // System.out.println(asiento.isDisponible()); // false
-    // asiento.liberar(); // Cancelación
-    // System.out.println(asiento.isDisponible()); // true
+    // System.out.println(asiento.isDisponible()); // true (nuevo)
+    // asiento.ocupar();  // Cliente compra
+    // System.out.println(asiento.isDisponible()); // false (vendido)
+    // asiento.liberar(); // Cliente cancela
+    // System.out.println(asiento.isDisponible()); // true (disponible de nuevo)
     //
     // TODO: public void liberar() {
     // TODO:     // Aquí: cambiar disponible a true

@@ -46,42 +46,52 @@ import java.time.LocalDateTime;
 public class Entrada {
 
     // ================================================
-    // PASO 2.1: ATRIBUTOS (Datos de una compra)
+    // PASO 2.1: ENCAPSULACIÓN - ATRIBUTOS PRIVADOS
     // ================================================
     // ¿POR QUÉ?
-    // Cada entrada es una compra diferente. Necesitamos guardar sus datos.
+    // Cada entrada es una compra diferente. Necesitamos guardar TODOS sus datos.
+    // Una entrada SIN datos = no sabe quién compró, dónde, cuándo, cuánto.
+    //
+    // ANALOGÍA: Una ENTRADA es como un RECIBO DEL BANCO:
+    // - ID: #12345 (número de transacción único)
+    // - Asiento: A2 (qué se compró)
+    // - Cliente: Juan (quién compró)
+    // - Fecha: 2026-04-29 18:30 (cuándo)
+    // - Precio: 85€ (cuánto)
     //
     // ¿PARA QUÉ CADA UNO?
-    // - id: Número único de cada entrada (0, 1, 2, 3...). Para buscarla después.
-    //   ¿Por qué único? Porque cuando cancelas, dices "cancela entrada #5".
-    //   Si dos entradas tuvieran el mismo ID, sería confuso.
     //
-    // - asiento: El objeto Asiento que se compró. Lo necesitamos porque:
-    //   * Para mostrar dónde está el asiento (A12 | VIP | 85€)
-    //   * Para liberar el asiento si se cancela
-    //   * Para saber el precio (lo tomamos del asiento)
+    // - id: Número ÚNICO de cada entrada (0, 1, 2, 3...)
+    //   ¿Por qué único? Porque cuando cancelas, dices "cancela entrada #5"
+    //   Si dos entradas tuvieran el mismo ID, sería IMPOSIBLE saber cuál cancelar
+    //   ENCAPSULACIÓN: id es PRIVATE para que nadie lo cambie
     //
-    // - cliente: Nombre de quién compró. Para:
-    //   * Mostrar quién es el dueño de la entrada
-    //   * En sistemas reales, para verificar identidad en la puerta
+    // - asiento: El objeto Asiento QUE SE COMPRÓ
+    //   Lo necesitamos porque:
+    //   * Mostrar: "Asiento A2 | VIP | 85€"
+    //   * Liberar el asiento si se cancela
+    //   * Obtener el precio
+    //   ENCAPSULACIÓN: asiento es PRIVATE, no puede cambiarse después de compra
     //
-    // - fecha: Cuándo se compró. Para:
-    //   * Registrar auditoría (quién compró primero, etc)
-    //   * En sistemas reales, generar recibos con timestamp
+    // - cliente: Nombre de quién compró
+    //   Para:
+    //   * Mostrar "Entrada de Juan"
+    //   * Verificar identidad en la puerta
+    //   ENCAPSULACIÓN: cliente es PRIVATE
     //
-    // - precio: Cuánto pagó. Para:
-    //   * Sumar todas las ventas (calcular recaudación)
-    //   * Mostrar en el recibo
-    //   * Nota: Es redundante (podríamos tomar asiento.getPrecio()),
-    //     pero lo guardamos por si el precio cambia después (no en este ejercicio)
+    // - fecha: Cuándo se compró (fecha + hora)
+    //   Para:
+    //   * Auditoría: quién compró primero si hay disputa
+    //   * Registrar timestamp del sistema
+    //   * LocalDateTime.now() captura el momento exacto de compra
+    //   ENCAPSULACIÓN: fecha es PRIVATE y se genera AUTOMÁTICAMENTE
     //
-    // ¿PASO A PASO?
-    // 1. Declara 5 atributos PRIVADOS (private)
-    // 2. int para ID (identificador único)
-    // 3. Asiento para la referencia al asiento comprado
-    // 4. String para nombre del cliente
-    // 5. LocalDateTime para la fecha/hora de compra
-    // 6. double para el precio pagado
+    // - precio: Cuánto pagó
+    //   Para:
+    //   * Sumar todas las ventas (recaudación total)
+    //   * Mostrar en recibo
+    //   Nota: Se toma del asiento al crear la entrada
+    //   ENCAPSULACIÓN: precio es PRIVATE
     //
     private int id;
     private Asiento asiento;
@@ -90,52 +100,74 @@ public class Entrada {
     private double precio;
 
     // ================================================
-    // PASO 2.2: CONSTRUCTOR
+    // PASO 2.2: CONSTRUCTOR - Crear una entrada en el momento de compra
     // ================================================
     // ¿POR QUÉ?
-    // Para crear una Entrada necesitamos inicializar todos sus datos.
-    // Se llama SOLO cuando alguien compra una entrada.
+    // Una entrada SOLO EXISTE cuando alguien COMPRA.
+    // El constructor CAPTURA todos los datos del momento de la compra.
+    //
+    // ANALOGÍA: Cuando PAGAS en una tienda:
+    // 1. El vendedor anota quién eres (cliente)
+    // 2. Anota qué compraste (asiento A2)
+    // 3. Anota la hora (LocalDateTime.now())
+    // 4. Anota el precio (toma del asiento)
+    // 5. Te da un recibo con número único (ID)
     //
     // ¿PARÁMETROS?
+    // ¿Por qué SOLO 3 y no 5?
+    //
     // - int id: El número de entrada (Concierto mantiene un contador)
-    // - Asiento asiento: El asiento que se compró (lo buscamos en la matriz)
-    // - String cliente: Nombre de quién compra (lo pide Main por teclado)
+    //   Parámetro porque es VARIABLE (cada compra tiene ID diferente)
+    //
+    // - Asiento asiento: El asiento que se compró
+    //   Parámetro porque VARÍA (cada cliente elige asiento diferente)
+    //
+    // - String cliente: Nombre de quién compra
+    //   Parámetro porque VARÍA (clientes diferentes)
+    //
+    // - LocalDateTime fecha: ¿Por qué NO es parámetro?
+    //   AUTOMATISMO: Queremos SIEMPRE el momento EXACTO de compra
+    //   No lo pide manualmente porque sería error-prone
+    //   LocalDateTime.now() captura automáticamente hora/fecha del sistema
+    //
+    // - double precio: ¿Por qué NO es parámetro?
+    //   ABSTRACCIÓN: El precio está YA en el asiento
+    //   No pedimos "dame el precio" manualmente
+    //   EXTRAEMOS: asiento.getPrecio() (reutilizamos información)
     //
     // ¿QUÉ HACE?
-    // 1. Guarda el ID
-    // 2. Guarda la referencia al asiento (el objeto mismo, no una copia)
+    // 1. Guarda el ID único
+    // 2. Guarda la REFERENCIA al asiento (no una copia, el objeto original)
     // 3. Guarda el nombre del cliente
-    // 4. Toma la fecha AHORA (cuando se ejecuta este constructor)
-    // 5. Copia el precio del asiento al momento de la compra
-    //
-    // ¿POR QUÉ fecha = LocalDateTime.now()?
-    // Porque queremos saber CUÁNDO se compró. Si lo hiciéramos manual,
-    // habría que pasar la fecha como parámetro y sería error-prone.
-    // now() automáticamente toma la fecha/hora actual del sistema.
-    //
-    // ¿POR QUÉ precio = asiento.getPrecio()?
-    // Porque el precio ya está determinado en el asiento.
-    // No lo pedimos como parámetro, lo extraemos de ahí.
+    // 4. CAPTURA la fecha/hora ACTUAL (automático)
+    // 5. TOMA el precio del asiento en ESTE MOMENTO
     //
     // ¿PASO A PASO?
-    // 1. Crear método público constructor con 3 parámetros
-    // 2. Guardar cada parámetro en su atributo con "this."
-    // 3. Para fecha: usar LocalDateTime.now() (obtiene fecha/hora actual)
-    // 4. Para precio: usar asiento.getPrecio() (tomar del asiento que se compró)
+    // 1. Crear constructor public Entrada(...) con 3 parámetros
+    // 2. Guardar cada parámetro: this.id = id
+    // 3. Para fecha: LocalDateTime.now() (sin parámetro, automático)
+    // 4. Para precio: asiento.getPrecio() (sin parámetro, se extrae)
     //
     public Entrada(int id, Asiento asiento, String cliente) {
         this.id = id;
         this.asiento = asiento;
         this.cliente = cliente;
-        this.fecha = LocalDateTime.now();
-        this.precio = asiento.getPrecio();
+        this.fecha = LocalDateTime.now();        // Automático: fecha/hora ACTUAL
+        this.precio = asiento.getPrecio();       // Automático: precio del asiento
     }
 
     // ================================================
-    // PASO 2.3: GETTERS (Leer datos de la entrada)
+    // PASO 2.3: GETTERS - Leer datos de forma SEGURA (ENCAPSULACIÓN)
     // ================================================
     // ¿POR QUÉ?
-    // Para acceder a los datos privados de forma controlada.
+    // Los atributos son PRIVATE → nadie puede leerlos directamente.
+    // entrada.id ❌ NO FUNCIONA
+    // entrada.getId() ✅ FUNCIONA
+    //
+    // ANALOGÍA: Como un BANCO que NO MUESTRA dinero directamente:
+    // - Tú NO ves la bóveda (private atributos)
+    // - Preguntas al mostrador (public getters)
+    // - El mostrador TE DICE la información (return)
     //
     // ¿DÓNDE SE USAN?
     // - getId(): En Concierto.cancelarEntrada() para buscar por ID
@@ -144,12 +176,17 @@ public class Entrada {
     // - getFecha(): Para mostrar cuándo se compró
     // - getPrecio(): Para sumar todas las ventas
     //
+    // ABSTRACCIÓN: No necesitas saber DÓNDE está el dato, solo USAS el getter:
+    // - No importa cómo se almacena el ID (int, String, long)
+    // - No importa cómo se calcula la fecha
+    // - Solo llamas: entrada.getId() y listo
+    //
     // ¿PATRÓN?
     // Cada getter:
-    // - Es público (accesible desde otras clases)
+    // - Es public (cualquiera puede llamarlo)
     // - No recibe parámetros
-    // - Devuelve el valor del atributo correspondiente
-    // - El tipo de retorno coincide con el atributo
+    // - Devuelve el valor del atributo
+    // - El tipo de retorno COINCIDE con el atributo
     //
     public int getId() { return id; }
     public Asiento getAsiento() { return asiento; }
@@ -158,33 +195,45 @@ public class Entrada {
     public double getPrecio() { return precio; }
 
     // ================================================
-    // PASO 2.4: getDetalles() - Información formateada
+    // PASO 2.4: getDetalles() - ABSTRACCIÓN: Mostrar información legible
     // ================================================
     // ¿POR QUÉ?
-    // Cuando haces "Ver mis entradas", queremos mostrar algo legible, no objetos.
+    // Cuando haces "Ver mis entradas", queremos mostrar algo LEGIBLE.
+    // No puedes mostrar: "Entrada@12345xyz" (código interno del objeto)
+    //
+    // ABSTRACCIÓN: Escondemos CÓMO se construye, mostramos SOLO el resultado:
+    // Input: id=0, cliente="Juan", asiento=A2, fecha=2026-04-29, precio=85.0
+    // Output: "Entrada #0 | Cliente: Juan | Asiento A2 | VIP | 85€"  ← Bonito y claro
+    //
+    // ANALOGÍA: Como un RECIBO DE COMPRA:
+    // - Por dentro: objetos, datos, referencias
+    // - Por fuera: "Entrada #123 | Cliente: Juan | Asiento A2 | 85€"
+    // - El recibo ABSTRAE la complejidad
     //
     // ¿QUÉ MUESTRA?
-    // "Entrada #0 | Cliente: Juan | Asiento A2 | VIP | 85€"
-    // O similar con todos los detalles.
+    // "Entrada #0 | Cliente: Juan | Asiento A2 | VIP | 85€ | 2026-04-29"
     //
     // ¿CÓMO FUNCIONA?
     // 1. Concatena el ID: "Entrada #" + id
     // 2. Concatena el cliente: " | Cliente: " + cliente
     // 3. Concatena la info del asiento: " | Asiento " + asiento.getInfo()
-    //    (Nota: asiento.getInfo() ya incluye fila/numero/seccion/precio/estado)
+    //    (REUTILIZA el método getInfo() de Asiento - abstracción)
     // 4. Concatena la fecha: " | " + fecha.toLocalDate()
-    //    (toLocalDate() muestra solo YYYY-MM-DD, sin hora)
+    //    (toLocalDate() simplifica: solo YYYY-MM-DD, sin hora)
     //
     // ¿PARA QUÉ?
-    // Para que Main pueda hacer: System.out.println(entrada.getDetalles())
-    // Y mostrar algo bonito.
+    // Para que Main pueda hacer simplemente:
+    // System.out.println(entrada.getDetalles())
+    // Y mostrar un recibo bonito sin compilar manualmente la información
     //
     // ¿PASO A PASO?
-    // 1. Retornar un String que concatene varios datos
+    // 1. Crear un String que concatene varios datos
     // 2. Empezar con "Entrada #" + id
     // 3. Agregar " | Cliente: " + cliente
-    // 4. Agregar " | Asiento " + asiento.getInfo() (reutiliza método de Asiento)
-    // 5. Agregar " | " + fecha.toLocalDate() (solo YYYY-MM-DD, sin hora)
+    // 4. Agregar " | Asiento " + asiento.getInfo()
+    //    (ABSTRACCIÓN: confiamos que getInfo() nos da el formato correcto)
+    // 5. Agregar " | " + fecha.toLocalDate()
+    //    (Convertir LocalDateTime a solo la fecha)
     //
     public String getDetalles() {
         return "Entrada #" + id + " | Cliente: " + cliente +

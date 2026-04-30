@@ -39,45 +39,55 @@ import java.util.ArrayList;
 public class Concierto {
 
     // ================================================
-    // PASO 3.1: ATRIBUTOS (Estado completo del concierto)
+    // ENCAPSULACIÓN: ATRIBUTOS PRIVADOS DEL CONCIERTO
     // ================================================
+    // Concierto es el "GESTOR" o "MOSTRADOR" del sistema de ticketing.
+    // Gestiona TODO lo que pasa internamente.
+    // Las otras clases (Main) NO acceden directamente, solo piden mediante métodos.
+    //
+    // ANALOGÍA: Concierto es como el MOSTRADOR DE UN CINE:
+    // - Tú NO entras a la bóveda o la trastienda
+    // - PREGUNTAS al mostrador: "¿Hay asientos?"
+    // - El mostrador busca, procesa, y TE RESPONDE
+    // - Los datos internos (asientos, dinero, registros) son PRIVATE
+    //
     // ¿POR QUÉ ESTOS ESPECÍFICAMENTE?
     //
     // - nombre (String): "Rosalía - Palau Sant Jordi"
-    //   Para identificar el evento. En un sistema real, tendrías múltiples conciertos.
+    //   Para identificar el evento
+    //   En un sistema real, tendrías múltiples conciertos
+    //   ENCAPSULACIÓN: nombre es PRIVATE, no lo cambia nadie
     //
     // - artista (String): "Rosalía"
-    //   Información del artista. Mostrar en detalles/tickets.
+    //   Información del artista
+    //   Para mostrar en detalles y tickets
+    //   ENCAPSULACIÓN: artista es PRIVATE
     //
-    // - asientos (Asiento[][]): MATRIZ 2D
-    //   ¿POR QUÉ 2D y no un ArrayList?
-    //   - 2D: matriz[fila][columna] es RÁPIDO (O(1))
-    //   - ArrayList: buscar sería lento (O(n))
-    //   Necesitamos acceso rápido a cada asiento.
+    // - asientos (Asiento[][]): MATRIZ 2D (10 filas × 8 columnas)
+    //   ¿POR QUÉ 2D y no ArrayList?
+    //   VELOCIDAD: matriz[i][j] es INSTANTÁNEO (O(1))
+    //   ArrayList: buscar sería LENTO (O(n))
+    //   Necesitamos acceso RÁPIDO a cada asiento
     //
     //   ¿POR QUÉ [10][8]?
-    //   - 10 filas (A-J) × 8 columnas = 80 asientos totales
-    //   - Tamaño fijo, nunca cambia
+    //   10 filas (A-J) × 8 columnas = 80 asientos totales
+    //   Tamaño FIJO, nunca cambia
     //
     // - entradas (ArrayList<Entrada>): LISTA DE COMPRAS
     //   ¿POR QUÉ ArrayList y no matriz?
-    //   - Número de entradas VARIABLE (0 a 80)
-    //   - Necesitamos iterar frecuentemente (mostrar todas)
-    //   - Necesitamos borrar del medio (cancelar)
-    //   ArrayList es perfecto para esto.
+    //   FLEXIBILIDAD: número de entradas es VARIABLE (0 a 80)
+    //   ArrayList permite: agregar, iterar, eliminar fácilmente
+    //   Matriz sería rígida
     //
-    // - contadorEntradas (int): CONTADOR DE IDs
+    // - contadorEntradas (int): CONTADOR AUTO-INCREMENTABLE DE IDs
     //   ¿POR QUÉ un contador?
-    //   - Cada entrada necesita un ID único (0, 1, 2, 3...)
-    //   - contadorEntradas siempre sube, nunca baja
-    //   - Así garantizamos IDs únicos aunque haya cancelaciones
-    //
-    // ¿PASO A PASO?
-    // 1. Declara "private String nombre" (info del evento)
-    // 2. Declara "private String artista" (info del artista)
-    // 3. Declara "private Asiento[][] asientos" (matriz 2D para los asientos)
-    // 4. Declara "private ArrayList<Entrada> entradas" (lista de compras)
-    // 5. Declara "private int contadorEntradas" (contador para IDs únicos)
+    //   Cada entrada necesita un ID ÚNICO (0, 1, 2, 3...)
+    //   Contador SIEMPRE sube, NUNCA baja
+    //   Así garantizamos IDs únicos incluso si hay cancelaciones
+    //   Ejemplo: Se venden 5 entradas (IDs 1,2,3,4,5)
+    //            Se cancela entrada #3
+    //            Se vende entrada #6 (el contador sigue subiendo)
+    //            No reutilizamos el #3 (evita confusiones)
     //
     private String nombre;
     private String artista;
@@ -86,65 +96,94 @@ public class Concierto {
     private int contadorEntradas;
 
     // ================================================
-    // PASO 3.2: CONSTRUCTOR
+    // PASO 3.2: CONSTRUCTOR - Preparar la estructura del concierto
     // ================================================
     // ¿PARA QUÉ?
-    // Inicializar un concierto nuevo.
+    // Inicializar un concierto NUEVO.
+    // Preparar todas las "cajas" que necesitamos.
+    //
+    // ANALOGÍA: Como ABRIR UN CINE NUEVO:
+    // 1. Pones el nombre en la puerta: "Cine Central"
+    // 2. Escribes quién toca: "Rosalía"
+    // 3. Compras asientos VACÍOS (sin llenar aún)
+    // 4. Preparas un registro de ventas (empty)
+    // 5. Inicializas el contador de tickets en 0
     //
     // ¿QUÉ HACE?
-    // 1. Guarda nombre y artista
-    // 2. Crea matriz vacía (10×8) - sin asientos aún, todos null
-    // 3. Crea ArrayList vacío - sin entradas aún
+    // 1. Guarda nombre y artista (info del evento)
+    // 2. Crea matriz VACÍA (10×8) - sin asientos aún, todos null
+    // 3. Crea ArrayList VACÍO - sin entradas aún
     // 4. Inicializa contador a 0
     //
-    // ¿POR QUÉ NO crea asientos aquí?
-    // Podría hacerlo, pero es mejor separar responsabilidades.
-    // El constructor prepara la estructura, inicializarAsientos() la llena.
+    // ¿POR QUÉ NO crea asientos AQUÍ?
+    // SEPARACIÓN DE RESPONSABILIDADES:
+    // - Constructor: PREPARA la estructura (cajas vacías)
+    // - inicializarAsientos(): LLENA la estructura (mete asientos en las cajas)
+    //
+    // Si metemos TODO en el constructor, sería GIGANTE
+    // Mejor hacerlo en dos pasos
     //
     // ¿PASO A PASO?
-    // 1. Guardar nombre con "this.nombre = nombre"
-    // 2. Guardar artista con "this.artista = artista"
-    // 3. Crear matriz: "asientos = new Asiento[10][8]" (vacía, sin elementos)
-    // 4. Crear ArrayList: "entradas = new ArrayList<>()" (vacío, sin entradas)
-    // 5. Inicializar contador: "contadorEntradas = 0" (comienza en 0)
+    // 1. Guardar datos: this.nombre = nombre
+    // 2. Guardar datos: this.artista = artista
+    // 3. Crear matriz VACÍA: asientos = new Asiento[10][8]
+    //    (Crea la estructura, pero sin objetos dentro)
+    // 4. Crear ArrayList VACÍO: entradas = new ArrayList<>()
+    //    (Crea la lista, pero vacía)
+    // 5. Inicializar contador: contadorEntradas = 0
+    //    (Comienza en 0, incrementará con cada venta)
     //
     public Concierto(String nombre, String artista) {
         this.nombre = nombre;
         this.artista = artista;
-        asientos = new Asiento[10][8];
-        entradas = new ArrayList<>();
-        contadorEntradas = 0;
+        asientos = new Asiento[10][8];      // Matriz vacía, lista para llenar
+        entradas = new ArrayList<>();       // ArrayList vacío, lista para compras
+        contadorEntradas = 0;               // Contador en 0, incrementará
     }
 
     // ================================================
-    // PASO 3.3: inicializarAsientos()
+    // PASO 3.3: inicializarAsientos() - Llenar la matriz de asientos
     // ================================================
     // ¿PARA QUÉ?
-    // Llenar la matriz con 80 Asientos, cada uno con su info.
+    // Llenar la matriz 10×8 con 80 OBJETOS Asiento.
+    // Cada asiento sabe: fila, número, sección, precio.
+    //
+    // ANALOGÍA: Como NUMERAR ASIENTOS EN UN TEATRO:
+    // Fila 1 (VIP): asiento 1, 2, 3, 4, 5, 6, 7, 8 → 85€ cada uno
+    // Fila 2 (VIP): asiento 1, 2, 3, 4, 5, 6, 7, 8 → 85€ cada uno
+    // Fila 3 (Premium): asiento 1, 2, 3, 4, 5, 6, 7, 8 → 65€ cada uno
+    // ...
+    // Fila 10 (Normal): asiento 1, 2, 3, 4, 5, 6, 7, 8 → 45€ cada uno
     //
     // ¿CÓMO FUNCIONA?
-    // 1. Dos bucles anidados: for (fila 0-9) for (columna 0-7)
-    // 2. Para cada posición, determina la sección según la fila:
-    //    - Fila 0-1 (primeras) → VIP (85€)
-    //    - Fila 2-4 (medio) → Premium (65€)
-    //    - Fila 5-9 (fondo) → Normal (45€)
+    // 1. Dos bucles anidados (recorrer la matriz)
+    // 2. Para cada posición [i][j], determina la sección según la FILA
     // 3. Crea un Asiento con esa información
-    // 4. Lo coloca en la matriz: asientos[i][j] = new Asiento(...)
+    // 4. Lo coloca en la matriz
     //
     // ¿POR QUÉ ESTOS PRECIOS?
-    // - VIP: adelante, mejor vista → más caro
-    // - Premium: medio → precio medio
-    // - Normal: atrás → más barato
+    // ECONOMÍA: Venta de entradas es como un CINE:
+    // - Filas ADELANTE (VIP): mejor vista → 85€ (más caro)
+    // - Filas MEDIO (Premium): vista normal → 65€ (medio)
+    // - Filas ATRÁS (Normal): vista lejana → 45€ (barato)
+    //
+    // ¿LÓGICA DE FILAS?
+    // Filas 0-1 (primeras dos) → VIP
+    //   porque: i < 2 (si i es 0 o 1)
+    // Filas 2-4 (tres de las siguientes) → Premium
+    //   porque: i < 5 (si i es 2, 3, o 4)
+    // Filas 5-9 (las últimas cinco) → Normal
+    //   porque: ninguna de las anteriores
     //
     // ¿PASO A PASO?
-    // 1. Bucle externo: for (int i = 0; i < asientos.length; i++) → recorre filas 0-9
-    // 2. Bucle interno: for (int j = 0; j < asientos[i].length; j++) → recorre columnas 0-7
-    // 3. Para cada [i][j], determinar sección:
-    //    - Si i < 2 → VIP (85€)
-    //    - Si i < 5 → Premium (65€)
-    //    - Si no → Normal (45€)
-    // 4. Crear nuevo Asiento con esos datos
-    // 5. Guardarlo en la matriz: asientos[i][j] = new Asiento(...)
+    // 1. For externo: recorrer filas (i = 0 a 9)
+    // 2. For interno: recorrer columnas (j = 0 a 7)
+    // 3. Determinar sección según i:
+    //    if (i < 2) seccion="VIP", precio=85
+    //    else if (i < 5) seccion="Premium", precio=65
+    //    else seccion="Normal", precio=45
+    // 4. Crear: new Asiento(i, j, seccion, precio)
+    // 5. Guardar en matriz: asientos[i][j] = ...
     //
     public void inicializarAsientos() {
         for (int i = 0; i < asientos.length; i++) {

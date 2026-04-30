@@ -40,26 +40,40 @@ public class Main {
 
     public static void main(String[] args) {
         // ================================================
-        // PASO 4.1: INICIALIZACIÓN
+        // PASO 4.1: INICIALIZACIÓN - Preparar todo antes del menú
         // ================================================
         // ¿POR QUÉ?
-        // Preparar todo lo que necesitamos antes del menú.
+        // Antes de mostrar el menú, necesitamos preparar:
+        // 1. El sistema de gestión (Concierto)
+        // 2. Los asientos (llenar la matriz)
+        // 3. La forma de leer input (Scanner)
+        // 4. La bandera de control (salir)
+        //
+        // ANALOGÍA: Como ABRIR UNA TIENDA:
+        // 1. Tomas control del mostrador (new Concierto)
+        // 2. Llenas los estantes (inicializarAsientos)
+        // 3. Abres la puerta (Scanner - escuchas clientes)
+        // 4. Empiezas con "abierto" (salir=false)
         //
         // ¿QUÉ HACEMOS?
-        // 1. Crear el concierto
-        //    → new Concierto() instancia una clase que gestiona todo
-        // 2. Inicializar asientos
-        //    → llena la matriz 10×8 con 80 Asientos
-        // 3. Crear Scanner
-        //    → permite leer input del usuario (teclado)
-        // 4. Variable para controlar el loop
-        //    → salir=false inicialmente, true cuando elige opción 7
+        // 1. Crear el CONCIERTO
+        //    new Concierto() → instancia que gestiona TODO
+        //    Nombre: "Rosalía - Palau Sant Jordi"
+        //    Artista: "Rosalía"
         //
-        // ¿PASO A PASO?
-        // 1. Crear Concierto: new Concierto("Rosalía - Palau Sant Jordi", "Rosalía")
-        // 2. Llenar matriz: concierto.inicializarAsientos()
-        // 3. Crear Scanner: new Scanner(System.in)
-        // 4. Bandera de salida: boolean salir = false
+        // 2. Inicializar ASIENTOS
+        //    concierto.inicializarAsientos() → llena 80 asientos
+        //    ABSTRACCIÓN: No queremos ver CÓMO se llenan
+        //    Solo llamamos el método y listo
+        //
+        // 3. Crear SCANNER
+        //    System.in → leer desde teclado
+        //    Scanner → transformar input a tipos (String, int, etc)
+        //    ENCAPSULACIÓN: Scanner encapsula la complejidad de leer entrada
+        //
+        // 4. Bandera de control
+        //    salir=false → inicialmente NO queremos salir
+        //    salir=true → cuando el usuario presiona 7
         //
         Concierto concierto = new Concierto("Rosalía - Palau Sant Jordi", "Rosalía");
         concierto.inicializarAsientos();
@@ -67,17 +81,24 @@ public class Main {
         boolean salir = false;
 
         // ================================================
-        // PASO 4.2: LOOP DEL MENÚ
+        // PASO 4.2: LOOP DEL MENÚ - Ciclo infinito hasta que salga
         // ================================================
         // ¿POR QUÉ while (!salir)?
-        // Mientras el usuario NO elija salir, seguimos mostrando menú.
-        // Cuando elige opción 7, salir=true y se rompe el loop.
+        // Mientras el usuario NO elija salir (salir=false)
+        // Seguimos mostrando el menú y pidiendo opciones
+        // Cuando elige opción 7 → salir=true → se rompe el loop
+        //
+        // ANALOGÍA: Como una TIENDA:
+        // while (tienda_abierta) {
+        //    atender_cliente();
+        //    si (cliente_dice_"cierra") tienda_abierta = false;
+        // }
         //
         // ¿QUÉ PASA EN CADA ITERACIÓN?
-        // 1. Mostrar menú
-        // 2. Pedir opción al usuario
-        // 3. Procesar opción (switch)
-        // 4. Volver al inicio (siguiente iteración)
+        // 1. Mostrar menú (6 opciones + salir)
+        // 2. Pedir opción al usuario (scanner.nextLine)
+        // 3. Procesar opción (switch statement)
+        // 4. Volver al inicio (siguiente iteración del while)
         //
         // ¿PASO A PASO?
         // 1. while (!salir) - mientras NO sea true salir
