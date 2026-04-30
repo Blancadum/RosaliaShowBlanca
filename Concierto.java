@@ -72,12 +72,18 @@ public class Concierto {
     //   - contadorEntradas siempre sube, nunca baja
     //   - Así garantizamos IDs únicos aunque haya cancelaciones
     //
-    // TODO: Declara los 5 atributos privados
-    // TODO: private String nombre;
-    // TODO: private String artista;
-    // TODO: private Asiento[][] asientos;
-    // TODO: private ArrayList<Entrada> entradas;
-    // TODO: private int contadorEntradas;
+    // ¿PASO A PASO?
+    // 1. Declara "private String nombre" (info del evento)
+    // 2. Declara "private String artista" (info del artista)
+    // 3. Declara "private Asiento[][] asientos" (matriz 2D para los asientos)
+    // 4. Declara "private ArrayList<Entrada> entradas" (lista de compras)
+    // 5. Declara "private int contadorEntradas" (contador para IDs únicos)
+    //
+    private String nombre;
+    private String artista;
+    private Asiento[][] asientos;
+    private ArrayList<Entrada> entradas;
+    private int contadorEntradas;
 
     // ================================================
     // PASO 3.2: CONSTRUCTOR
@@ -95,14 +101,20 @@ public class Concierto {
     // Podría hacerlo, pero es mejor separar responsabilidades.
     // El constructor prepara la estructura, inicializarAsientos() la llena.
     //
-    // TODO: Implementa el constructor
-    // TODO: public Concierto(String nombre, String artista) {
-    // TODO:     this.nombre = nombre;
-    // TODO:     this.artista = artista;
-    // TODO:     asientos = new Asiento[10][8];
-    // TODO:     entradas = new ArrayList<>();
-    // TODO:     contadorEntradas = 0;
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Guardar nombre con "this.nombre = nombre"
+    // 2. Guardar artista con "this.artista = artista"
+    // 3. Crear matriz: "asientos = new Asiento[10][8]" (vacía, sin elementos)
+    // 4. Crear ArrayList: "entradas = new ArrayList<>()" (vacío, sin entradas)
+    // 5. Inicializar contador: "contadorEntradas = 0" (comienza en 0)
+    //
+    public Concierto(String nombre, String artista) {
+        this.nombre = nombre;
+        this.artista = artista;
+        asientos = new Asiento[10][8];
+        entradas = new ArrayList<>();
+        contadorEntradas = 0;
+    }
 
     // ================================================
     // PASO 3.3: inicializarAsientos()
@@ -124,26 +136,35 @@ public class Concierto {
     // - Premium: medio → precio medio
     // - Normal: atrás → más barato
     //
-    // TODO: Implementa inicializarAsientos()
-    // TODO: public void inicializarAsientos() {
-    // TODO:     for (int i = 0; i < asientos.length; i++) {
-    // TODO:         for (int j = 0; j < asientos[i].length; j++) {
-    // TODO:             String seccion;
-    // TODO:             double precio;
-    // TODO:             if (i < 2) {
-    // TODO:                 seccion = "VIP";
-    // TODO:                 precio = 85.00;
-    // TODO:             } else if (i < 5) {
-    // TODO:                 seccion = "Premium";
-    // TODO:                 precio = 65.00;
-    // TODO:             } else {
-    // TODO:                 seccion = "Normal";
-    // TODO:                 precio = 45.00;
-    // TODO:             }
-    // TODO:             asientos[i][j] = new Asiento(i, j, seccion, precio);
-    // TODO:         }
-    // TODO:     }
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Bucle externo: for (int i = 0; i < asientos.length; i++) → recorre filas 0-9
+    // 2. Bucle interno: for (int j = 0; j < asientos[i].length; j++) → recorre columnas 0-7
+    // 3. Para cada [i][j], determinar sección:
+    //    - Si i < 2 → VIP (85€)
+    //    - Si i < 5 → Premium (65€)
+    //    - Si no → Normal (45€)
+    // 4. Crear nuevo Asiento con esos datos
+    // 5. Guardarlo en la matriz: asientos[i][j] = new Asiento(...)
+    //
+    public void inicializarAsientos() {
+        for (int i = 0; i < asientos.length; i++) {
+            for (int j = 0; j < asientos[i].length; j++) {
+                String seccion;
+                double precio;
+                if (i < 2) {
+                    seccion = "VIP";
+                    precio = 85.00;
+                } else if (i < 5) {
+                    seccion = "Premium";
+                    precio = 65.00;
+                } else {
+                    seccion = "Normal";
+                    precio = 45.00;
+                }
+                asientos[i][j] = new Asiento(i, j, seccion, precio);
+            }
+        }
+    }
 
     // ================================================
     // PASO 3.4: mostrarMapa()
@@ -165,19 +186,27 @@ public class Concierto {
     //      - Imprime ❌ si está ocupado
     // 3. Imprime nueva línea al final de cada fila
     //
-    // TODO: Implementa mostrarMapa()
-    // TODO: public void mostrarMapa() {
-    // TODO:     System.out.println("\n=== MAPA DE ASIENTOS ===");
-    // TODO:     System.out.println("✅ = Disponible | ❌ = Ocupado\n");
-    // TODO:     for (int i = 0; i < asientos.length; i++) {
-    // TODO:         char letraFila = (char)('A' + i);
-    // TODO:         System.out.print(letraFila + " ");
-    // TODO:         for (int j = 0; j < asientos[i].length; j++) {
-    // TODO:             System.out.print(asientos[i][j].getMarcaAsiento() + " ");
-    // TODO:         }
-    // TODO:         System.out.println();
-    // TODO:     }
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Imprimir títulos y leyenda
+    // 2. Bucle externo: for (int i = 0; i < asientos.length; i++)
+    // 3. Para cada fila i, convertir a letra: char letraFila = (char)('A' + i)
+    // 4. Imprimir la letra: System.out.print(letraFila + " ")
+    // 5. Bucle interno: for (int j = 0; j < asientos[i].length; j++)
+    // 6. Para cada asiento, imprimir su marca: asientos[i][j].getMarcaAsiento()
+    // 7. Imprimir nueva línea al final de cada fila: System.out.println()
+    //
+    public void mostrarMapa() {
+        System.out.println("\n=== MAPA DE ASIENTOS ===");
+        System.out.println("✅ = Disponible | ❌ = Ocupado\n");
+        for (int i = 0; i < asientos.length; i++) {
+            char letraFila = (char)('A' + i);
+            System.out.print(letraFila + " ");
+            for (int j = 0; j < asientos[i].length; j++) {
+                System.out.print(asientos[i][j].getMarcaAsiento() + " ");
+            }
+            System.out.println();
+        }
+    }
 
     // ================================================
     // PASO 3.5: buscarAsiento()
@@ -194,13 +223,18 @@ public class Concierto {
     // 2. Si sí: retorna asientos[fila][numero]
     // 3. Si no: retorna null
     //
-    // TODO: Implementa buscarAsiento()
-    // TODO: public Asiento buscarAsiento(int fila, int numero) {
-    // TODO:     if (fila < 0 || fila >= asientos.length || numero < 0 || numero >= asientos[0].length) {
-    // TODO:         return null;
-    // TODO:     }
-    // TODO:     return asientos[fila][numero];
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Crear un if que verifique si fila o numero están fuera de rango
+    // 2. Condiciones para validar: fila < 0 || fila >= 10 || numero < 0 || numero >= 8
+    // 3. Si alguna condición es true → return null (asiento inválido)
+    // 4. Si todas pasan → return asientos[fila][numero] (asiento válido)
+    //
+    public Asiento buscarAsiento(int fila, int numero) {
+        if (fila < 0 || fila >= asientos.length || numero < 0 || numero >= asientos[0].length) {
+            return null;
+        }
+        return asientos[fila][numero];
+    }
 
     // ================================================
     // PASO 3.6: comprarEntrada()
@@ -227,21 +261,30 @@ public class Concierto {
     // Después de crear la Entrada, el asiento ya no está disponible.
     // asiento.ocupar() marca disponible=false.
     //
-    // TODO: Implementa comprarEntrada()
-    // TODO: public int comprarEntrada(int fila, int numero, String cliente) throws IllegalArgumentException {
-    // TODO:     Asiento asiento = buscarAsiento(fila, numero);
-    // TODO:     if (asiento == null) {
-    // TODO:         throw new IllegalArgumentException("Asiento inválido");
-    // TODO:     }
-    // TODO:     if (!asiento.isDisponible()) {
-    // TODO:         throw new IllegalArgumentException("Asiento ya ocupado");
-    // TODO:     }
-    // TODO:     contadorEntradas++;
-    // TODO:     Entrada entrada = new Entrada(contadorEntradas, asiento, cliente);
-    // TODO:     asiento.ocupar();
-    // TODO:     entradas.add(entrada);
-    // TODO:     return contadorEntradas;
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Buscar el asiento: Asiento asiento = buscarAsiento(fila, numero)
+    // 2. Si asiento == null → throw IllegalArgumentException("Asiento inválido")
+    // 3. Si !asiento.isDisponible() → throw IllegalArgumentException("Asiento ya ocupado")
+    // 4. Incrementar contador: contadorEntradas++
+    // 5. Crear entrada: new Entrada(contadorEntradas, asiento, cliente)
+    // 6. Ocupar el asiento: asiento.ocupar()
+    // 7. Guardar en lista: entradas.add(entrada)
+    // 8. Retornar el ID de la entrada: return contadorEntradas
+    //
+    public int comprarEntrada(int fila, int numero, String cliente) throws IllegalArgumentException {
+        Asiento asiento = buscarAsiento(fila, numero);
+        if (asiento == null) {
+            throw new IllegalArgumentException("Asiento inválido");
+        }
+        if (!asiento.isDisponible()) {
+            throw new IllegalArgumentException("Asiento ya ocupado");
+        }
+        contadorEntradas++;
+        Entrada entrada = new Entrada(contadorEntradas, asiento, cliente);
+        asiento.ocupar();
+        entradas.add(entrada);
+        return contadorEntradas;
+    }
 
     // ================================================
     // PASO 3.7: cancelarEntrada()
@@ -263,17 +306,24 @@ public class Concierto {
     // Causa ConcurrentModificationException.
     // For tradicional con índice es seguro.
     //
-    // TODO: Implementa cancelarEntrada()
-    // TODO: public void cancelarEntrada(int idEntrada) {
-    // TODO:     for (int i = 0; i < entradas.size(); i++) {
-    // TODO:         if (entradas.get(i).getId() == idEntrada) {
-    // TODO:             Entrada entrada = entradas.get(i);
-    // TODO:             entrada.getAsiento().liberar();
-    // TODO:             entradas.remove(i);
-    // TODO:             return;
-    // TODO:         }
-    // TODO:     }
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. For con índice: for (int i = 0; i < entradas.size(); i++)
+    // 2. Comparar: if (entradas.get(i).getId() == idEntrada)
+    // 3. Si encuentra, obtener la entrada: Entrada entrada = entradas.get(i)
+    // 4. Liberar el asiento: entrada.getAsiento().liberar()
+    // 5. Eliminar del ArrayList: entradas.remove(i)
+    // 6. Retornar para salir del método
+    //
+    public void cancelarEntrada(int idEntrada) {
+        for (int i = 0; i < entradas.size(); i++) {
+            if (entradas.get(i).getId() == idEntrada) {
+                Entrada entrada = entradas.get(i);
+                entrada.getAsiento().liberar();
+                entradas.remove(i);
+                return;
+            }
+        }
+    }
 
     // ================================================
     // PASO 3.8: calcularOcupacion()
@@ -292,11 +342,16 @@ public class Concierto {
     // - Usar para comparaciones: if (ocupacion > 0.75) warning()
     // - Guardar en base de datos
     //
-    // TODO: Implementa calcularOcupacion()
-    // TODO: public double calcularOcupacion() {
-    // TODO:     int total = asientos.length * asientos[0].length;
-    // TODO:     return (double) entradas.size() / total;
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Calcular total de asientos: asientos.length × asientos[0].length (10 × 8 = 80)
+    // 2. Obtener entradas vendidas: entradas.size()
+    // 3. Dividir: (double) entradas.size() / total (cast a double para precisión)
+    // 4. Retornar el resultado (0.0 a 1.0)
+    //
+    public double calcularOcupacion() {
+        int total = asientos.length * asientos[0].length;
+        return (double) entradas.size() / total;
+    }
 
     // ================================================
     // PASO 3.9: calcularRecaudacion()
@@ -313,14 +368,19 @@ public class Concierto {
     // 5 Normal (45€ c/u) = 225€
     // Total = 1725€
     //
-    // TODO: Implementa calcularRecaudacion()
-    // TODO: public double calcularRecaudacion() {
-    // TODO:     double total = 0;
-    // TODO:     for (Entrada e : entradas) {
-    // TODO:         total += e.getPrecio();
-    // TODO:     }
-    // TODO:     return total;
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Declarar variable acumuladora: double total = 0
+    // 2. For-each para iterar entradas: for (Entrada e : entradas)
+    // 3. Sumar en cada iteración: total += e.getPrecio()
+    // 4. Retornar total al finalizar
+    //
+    public double calcularRecaudacion() {
+        double total = 0;
+        for (Entrada e : entradas) {
+            total += e.getPrecio();
+        }
+        return total;
+    }
 
     // ================================================
     // PASO 3.10: verEntradasVendidas()
@@ -332,16 +392,29 @@ public class Concierto {
     // 1. ¿ArrayList está vacío? → mostrar "No hay entradas"
     // 2. Si no → iterar y mostrar detalles de cada una
     //
-    // TODO: Implementa verEntradasVendidas()
-    // TODO: public void verEntradasVendidas() {
-    // TODO:     if (entradas.isEmpty()) {
-    // TODO:         System.out.println("No hay entradas vendidas");
-    // TODO:         return;
-    // TODO:     }
-    // TODO:     System.out.println("\n=== ENTRADAS VENDIDAS ===");
-    // TODO:     for (Entrada e : entradas) {
-    // TODO:         System.out.println(e.getDetalles());
-    // TODO:     }
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Verificar si ArrayList está vacío: if (entradas.isEmpty())
+    // 2. Si está vacío → System.out.println("No hay entradas vendidas") y return
+    // 3. Si no está vacío → imprimir título
+    // 4. For-each para iterar: for (Entrada e : entradas)
+    // 5. Mostrar detalles: System.out.println(e.getDetalles())
+    //
+    public void verEntradasVendidas() {
+        if (entradas.isEmpty()) {
+            System.out.println("No hay entradas vendidas");
+            return;
+        }
+        System.out.println("\n=== ENTRADAS VENDIDAS ===");
+        for (Entrada e : entradas) {
+            System.out.println(e.getDetalles());
+        }
+    }
+
+    // ================================================
+    // GETTER para acceder a las entradas (necesario en Main)
+    // ================================================
+    public ArrayList<Entrada> getEntradas() {
+        return entradas;
+    }
 
 }

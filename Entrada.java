@@ -75,12 +75,19 @@ public class Entrada {
     //   * Nota: Es redundante (podríamos tomar asiento.getPrecio()),
     //     pero lo guardamos por si el precio cambia después (no en este ejercicio)
     //
-    // TODO: Declara los 5 atributos privados
-    // TODO: private int id;
-    // TODO: private Asiento asiento;
-    // TODO: private String cliente;
-    // TODO: private LocalDateTime fecha;
-    // TODO: private double precio;
+    // ¿PASO A PASO?
+    // 1. Declara 5 atributos PRIVADOS (private)
+    // 2. int para ID (identificador único)
+    // 3. Asiento para la referencia al asiento comprado
+    // 4. String para nombre del cliente
+    // 5. LocalDateTime para la fecha/hora de compra
+    // 6. double para el precio pagado
+    //
+    private int id;
+    private Asiento asiento;
+    private String cliente;
+    private LocalDateTime fecha;
+    private double precio;
 
     // ================================================
     // PASO 2.2: CONSTRUCTOR
@@ -110,14 +117,19 @@ public class Entrada {
     // Porque el precio ya está determinado en el asiento.
     // No lo pedimos como parámetro, lo extraemos de ahí.
     //
-    // TODO: Implementa el constructor
-    // TODO: public Entrada(int id, Asiento asiento, String cliente) {
-    // TODO:     this.id = id;
-    // TODO:     this.asiento = asiento;
-    // TODO:     this.cliente = cliente;
-    // TODO:     this.fecha = LocalDateTime.now();
-    // TODO:     this.precio = asiento.getPrecio();
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Crear método público constructor con 3 parámetros
+    // 2. Guardar cada parámetro en su atributo con "this."
+    // 3. Para fecha: usar LocalDateTime.now() (obtiene fecha/hora actual)
+    // 4. Para precio: usar asiento.getPrecio() (tomar del asiento que se compró)
+    //
+    public Entrada(int id, Asiento asiento, String cliente) {
+        this.id = id;
+        this.asiento = asiento;
+        this.cliente = cliente;
+        this.fecha = LocalDateTime.now();
+        this.precio = asiento.getPrecio();
+    }
 
     // ================================================
     // PASO 2.3: GETTERS (Leer datos de la entrada)
@@ -132,12 +144,18 @@ public class Entrada {
     // - getFecha(): Para mostrar cuándo se compró
     // - getPrecio(): Para sumar todas las ventas
     //
-    // TODO: Implementa los 5 getters
-    // TODO: public int getId() { return id; }
-    // TODO: public Asiento getAsiento() { return asiento; }
-    // TODO: public String getCliente() { return cliente; }
-    // TODO: public LocalDateTime getFecha() { return fecha; }
-    // TODO: public double getPrecio() { return precio; }
+    // ¿PATRÓN?
+    // Cada getter:
+    // - Es público (accesible desde otras clases)
+    // - No recibe parámetros
+    // - Devuelve el valor del atributo correspondiente
+    // - El tipo de retorno coincide con el atributo
+    //
+    public int getId() { return id; }
+    public Asiento getAsiento() { return asiento; }
+    public String getCliente() { return cliente; }
+    public LocalDateTime getFecha() { return fecha; }
+    public double getPrecio() { return precio; }
 
     // ================================================
     // PASO 2.4: getDetalles() - Información formateada
@@ -161,11 +179,17 @@ public class Entrada {
     // Para que Main pueda hacer: System.out.println(entrada.getDetalles())
     // Y mostrar algo bonito.
     //
-    // TODO: Implementa getDetalles()
-    // TODO: public String getDetalles() {
-    // TODO:     return "Entrada #" + id + " | Cliente: " + cliente +
-    // TODO:            " | Asiento " + asiento.getInfo() +
-    // TODO:            " | " + fecha.toLocalDate();
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Retornar un String que concatene varios datos
+    // 2. Empezar con "Entrada #" + id
+    // 3. Agregar " | Cliente: " + cliente
+    // 4. Agregar " | Asiento " + asiento.getInfo() (reutiliza método de Asiento)
+    // 5. Agregar " | " + fecha.toLocalDate() (solo YYYY-MM-DD, sin hora)
+    //
+    public String getDetalles() {
+        return "Entrada #" + id + " | Cliente: " + cliente +
+               " | Asiento " + asiento.getInfo() +
+               " | " + fecha.toLocalDate();
+    }
 
 }

@@ -55,11 +55,16 @@ public class Main {
         // 4. Variable para controlar el loop
         //    → salir=false inicialmente, true cuando elige opción 7
         //
-        // TODO: Implementa la inicialización
-        // TODO: Concierto concierto = new Concierto("Rosalía - Palau Sant Jordi", "Rosalía");
-        // TODO: concierto.inicializarAsientos();
-        // TODO: Scanner scanner = new Scanner(System.in);
-        // TODO: boolean salir = false;
+        // ¿PASO A PASO?
+        // 1. Crear Concierto: new Concierto("Rosalía - Palau Sant Jordi", "Rosalía")
+        // 2. Llenar matriz: concierto.inicializarAsientos()
+        // 3. Crear Scanner: new Scanner(System.in)
+        // 4. Bandera de salida: boolean salir = false
+        //
+        Concierto concierto = new Concierto("Rosalía - Palau Sant Jordi", "Rosalía");
+        concierto.inicializarAsientos();
+        Scanner scanner = new Scanner(System.in);
+        boolean salir = false;
 
         // ================================================
         // PASO 4.2: LOOP DEL MENÚ
@@ -74,52 +79,64 @@ public class Main {
         // 3. Procesar opción (switch)
         // 4. Volver al inicio (siguiente iteración)
         //
-        // TODO: Implementa el loop con el menú
-        // TODO: while (!salir) {
-        // TODO:     System.out.println("\n🎤 === SISTEMA DE ENTRADAS ROSALÍA ===");
-        // TODO:     System.out.println("1. Ver mapa de asientos");
-        // TODO:     System.out.println("2. Comprar entrada");
-        // TODO:     System.out.println("3. Ver mis entradas");
-        // TODO:     System.out.println("4. Cancelar entrada");
-        // TODO:     System.out.println("5. Ver estadísticas");
-        // TODO:     System.out.println("6. Generar ticket");
-        // TODO:     System.out.println("7. Salir");
-        // TODO:     System.out.print("Elige: ");
+        // ¿PASO A PASO?
+        // 1. while (!salir) - mientras NO sea true salir
+        // 2. Mostrar menú con 7 opciones
+        // 3. Pedir input al usuario con System.out.print("Elige: ")
+        // 4. Procesar con switch (en siguiente sección)
+        //
+        while (!salir) {
+            System.out.println("\n🎤 === SISTEMA DE ENTRADAS ROSALÍA ===");
+            System.out.println("1. Ver mapa de asientos");
+            System.out.println("2. Comprar entrada");
+            System.out.println("3. Ver mis entradas");
+            System.out.println("4. Cancelar entrada");
+            System.out.println("5. Ver estadísticas");
+            System.out.println("6. Generar ticket");
+            System.out.println("7. Salir");
+            System.out.print("Elige: ");
 
-        // ================================================
-        // PASO 4.3: SWITCH PARA PROCESAR OPCIÓN
-        // ================================================
-        // ¿POR QUÉ switch y no if-else?
-        // Switch es más limpio cuando tienes muchos casos.
-        // Cada case llama a un método diferente.
-        //
-        // ¿QUÉ HACE CADA CASO?
-        // - case 1: mostrar mapa visual
-        // - case 2: flujo de compra (pedir fila, número, nombre)
-        // - case 3: listar todas las entradas vendidas
-        // - case 4: cancelar una entrada por ID
-        // - case 5: mostrar ocupación y dinero ganado
-        // - case 6: generar un "ticket bonito"
-        // - case 7: salir del programa
-        //
-        // TODO: Implementa el switch
-        // TODO:     try {
-        // TODO:         int opcion = Integer.parseInt(scanner.nextLine());
-        // TODO:         switch (opcion) {
-        // TODO:             case 1: verMapa(concierto); break;
-        // TODO:             case 2: comprarEntrada(concierto, scanner); break;
-        // TODO:             case 3: verEntradas(concierto); break;
-        // TODO:             case 4: cancelarEntrada(concierto, scanner); break;
-        // TODO:             case 5: verEstadisticas(concierto); break;
-        // TODO:             case 6: generarTicket(concierto, scanner); break;
-        // TODO:             case 7: salir = true; System.out.println("👋 ¡Que disfrutes el concierto!"); break;
-        // TODO:             default: System.out.println("❌ Opción no válida");
-        // TODO:         }
-        // TODO:     } catch (NumberFormatException e) {
-        // TODO:         System.out.println("❌ Debes ingresar un número");
-        // TODO:     }
-        // TODO: }
-        // TODO: scanner.close();
+            // ================================================
+            // PASO 4.3: SWITCH PARA PROCESAR OPCIÓN
+            // ================================================
+            // ¿POR QUÉ switch y no if-else?
+            // Switch es más limpio cuando tienes muchos casos.
+            // Cada case llama a un método diferente.
+            //
+            // ¿QUÉ HACE CADA CASO?
+            // - case 1: mostrar mapa visual
+            // - case 2: flujo de compra (pedir fila, número, nombre)
+            // - case 3: listar todas las entradas vendidas
+            // - case 4: cancelar una entrada por ID
+            // - case 5: mostrar ocupación y dinero ganado
+            // - case 6: generar un "ticket bonito"
+            // - case 7: salir del programa
+            //
+            // ¿PASO A PASO?
+            // 1. try { para capturar NumberFormatException
+            // 2. Leer opción: int opcion = Integer.parseInt(scanner.nextLine())
+            // 3. switch (opcion) con 7 cases + default
+            // 4. Cada case llama a su método correspondiente
+            // 5. break; para salir del switch
+            // 6. catch para manejar si usuario escribe "abc" en lugar de número
+            //
+            try {
+                int opcion = Integer.parseInt(scanner.nextLine());
+                switch (opcion) {
+                    case 1: verMapa(concierto); break;
+                    case 2: comprarEntrada(concierto, scanner); break;
+                    case 3: verEntradas(concierto); break;
+                    case 4: cancelarEntrada(concierto, scanner); break;
+                    case 5: verEstadisticas(concierto); break;
+                    case 6: generarTicket(concierto, scanner); break;
+                    case 7: salir = true; System.out.println("👋 ¡Que disfrutes el concierto!"); break;
+                    default: System.out.println("❌ Opción no válida");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("❌ Debes ingresar un número");
+            }
+        }
+        scanner.close();
     }
 
     // ================================================
@@ -143,10 +160,15 @@ public class Main {
     // Solo llamar a concierto.mostrarMapa().
     // Concierto se encarga de toda la lógica.
     //
-    // TODO: Implementa verMapa()
-    // TODO: private static void verMapa(Concierto concierto) {
-    // TODO:     concierto.mostrarMapa();
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Es un método privado static (se llama desde main)
+    // 2. Recibe Concierto como parámetro
+    // 3. Simplemente: concierto.mostrarMapa()
+    // 4. Ese método maneja toda la lógica de mostrar
+    //
+    private static void verMapa(Concierto concierto) {
+        concierto.mostrarMapa();
+    }
 
     // ================================================
     // OPCIÓN 2: Comprar entrada
@@ -166,25 +188,32 @@ public class Main {
     // - NumberFormatException: usuario escribe "abc" en lugar de número
     // - IllegalArgumentException: asiento inválido/ya ocupado (lanzada por Concierto)
     //
-    // TODO: Implementa comprarEntrada()
-    // TODO: private static void comprarEntrada(Concierto concierto, Scanner scanner) {
-    // TODO:     concierto.mostrarMapa();
-    // TODO:     System.out.print("Fila (A-J): ");
-    // TODO:     String filaStr = scanner.nextLine().toUpperCase();
-    // TODO:     int fila = filaStr.charAt(0) - 'A';  // A(65) - A(65) = 0, B(66) - A(65) = 1...
-    // TODO:     System.out.print("Número (0-7): ");
-    // TODO:     try {
-    // TODO:         int numero = Integer.parseInt(scanner.nextLine());
-    // TODO:         System.out.print("Tu nombre: ");
-    // TODO:         String nombre = scanner.nextLine();
-    // TODO:         int idEntrada = concierto.comprarEntrada(fila, numero, nombre);
-    // TODO:         System.out.println("✅ ¡Entrada comprada! ID: " + idEntrada);
-    // TODO:     } catch (NumberFormatException e) {
-    // TODO:         System.out.println("❌ Número inválido");
-    // TODO:     } catch (IllegalArgumentException e) {
-    // TODO:         System.out.println("❌ " + e.getMessage());
-    // TODO:     }
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Mostrar mapa: concierto.mostrarMapa()
+    // 2. Pedir fila (A-J): convertir letra a índice con charAt(0) - 'A'
+    // 3. Dentro de try: pedir número, nombre, y llamar comprarEntrada()
+    // 4. Si éxito: mostrar ID
+    // 5. Si error de número: catch NumberFormatException
+    // 6. Si error de lógica: catch IllegalArgumentException
+    //
+    private static void comprarEntrada(Concierto concierto, Scanner scanner) {
+        concierto.mostrarMapa();
+        System.out.print("Fila (A-J): ");
+        String filaStr = scanner.nextLine().toUpperCase();
+        int fila = filaStr.charAt(0) - 'A';  // A(65) - A(65) = 0, B(66) - A(65) = 1...
+        System.out.print("Número (0-7): ");
+        try {
+            int numero = Integer.parseInt(scanner.nextLine());
+            System.out.print("Tu nombre: ");
+            String nombre = scanner.nextLine();
+            int idEntrada = concierto.comprarEntrada(fila, numero, nombre);
+            System.out.println("✅ ¡Entrada comprada! ID: " + idEntrada);
+        } catch (NumberFormatException e) {
+            System.out.println("❌ Número inválido");
+        } catch (IllegalArgumentException e) {
+            System.out.println("❌ " + e.getMessage());
+        }
+    }
 
     // ================================================
     // OPCIÓN 3: Ver entradas vendidas
@@ -195,10 +224,15 @@ public class Main {
     // ¿CÓMO?
     // Solo delegamos a concierto.verEntradasVendidas().
     //
-    // TODO: Implementa verEntradas()
-    // TODO: private static void verEntradas(Concierto concierto) {
-    // TODO:     concierto.verEntradasVendidas();
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Método private static
+    // 2. Recibe Concierto
+    // 3. Llamar: concierto.verEntradasVendidas()
+    // 4. Ese método muestra el listado
+    //
+    private static void verEntradas(Concierto concierto) {
+        concierto.verEntradasVendidas();
+    }
 
     // ================================================
     // OPCIÓN 4: Cancelar entrada
@@ -214,16 +248,21 @@ public class Main {
     //    - Liberar asiento
     //    - Eliminar del registro
     //
-    // TODO: Implementa cancelarEntrada()
-    // TODO: private static void cancelarEntrada(Concierto concierto, Scanner scanner) {
-    // TODO:     System.out.print("ID de entrada a cancelar: ");
-    // TODO:     try {
-    // TODO:         int id = Integer.parseInt(scanner.nextLine());
-    // TODO:         concierto.cancelarEntrada(id);
-    // TODO:     } catch (NumberFormatException e) {
-    // TODO:         System.out.println("❌ ID debe ser un número");
-    // TODO:     }
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Mostrar prompt: "ID de entrada a cancelar: "
+    // 2. try { obtener ID con Integer.parseInt()
+    // 3. Llamar: concierto.cancelarEntrada(id)
+    // 4. catch NumberFormatException si usuario escribe texto
+    //
+    private static void cancelarEntrada(Concierto concierto, Scanner scanner) {
+        System.out.print("ID de entrada a cancelar: ");
+        try {
+            int id = Integer.parseInt(scanner.nextLine());
+            concierto.cancelarEntrada(id);
+        } catch (NumberFormatException e) {
+            System.out.println("❌ ID debe ser un número");
+        }
+    }
 
     // ================================================
     // OPCIÓN 5: Ver estadísticas
@@ -240,16 +279,21 @@ public class Main {
     // ¿String.format()?
     // Permite formatear números: %.1f = 1 decimal, %.2f = 2 decimales
     //
-    // TODO: Implementa verEstadisticas()
-    // TODO: private static void verEstadisticas(Concierto concierto) {
-    // TODO:     double ocupacion = concierto.calcularOcupacion();
-    // TODO:     double recaudacion = concierto.calcularRecaudacion();
-    // TODO:     int vendidas = (int)(ocupacion * 80);
-    // TODO:     System.out.println("\n=== ESTADÍSTICAS ===");
-    // TODO:     System.out.println("Entradas vendidas: " + vendidas + "/80");
-    // TODO:     System.out.println("Ocupación: " + String.format("%.1f", ocupacion * 100) + "%");
-    // TODO:     System.out.println("Recaudación: " + String.format("%.2f", recaudacion) + "€");
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Obtener ocupación: double ocupacion = concierto.calcularOcupacion()
+    // 2. Obtener recaudación: double recaudacion = concierto.calcularRecaudacion()
+    // 3. Convertir a cantidad: int vendidas = (int)(ocupacion * 80)
+    // 4. Imprimir con formato bonito usando String.format()
+    //
+    private static void verEstadisticas(Concierto concierto) {
+        double ocupacion = concierto.calcularOcupacion();
+        double recaudacion = concierto.calcularRecaudacion();
+        int vendidas = (int)(ocupacion * 80);
+        System.out.println("\n=== ESTADÍSTICAS ===");
+        System.out.println("Entradas vendidas: " + vendidas + "/80");
+        System.out.println("Ocupación: " + String.format("%.1f", ocupacion * 100) + "%");
+        System.out.println("Recaudación: " + String.format("%.2f", recaudacion) + "€");
+    }
 
     // ================================================
     // OPCIÓN 6: Generar ticket
@@ -266,24 +310,31 @@ public class Main {
     // ¿POR QUÉ try-catch?
     // Para manejar si el usuario escribe "abc" en lugar de número.
     //
-    // TODO: Implementa generarTicket()
-    // TODO: private static void generarTicket(Concierto concierto, Scanner scanner) {
-    // TODO:     System.out.print("ID de entrada: ");
-    // TODO:     try {
-    // TODO:         int id = Integer.parseInt(scanner.nextLine());
-    // TODO:         for (Entrada e : concierto.getEntradas()) {
-    // TODO:             if (e.getId() == id) {
-    // TODO:                 System.out.println("\n🎫 === TICKET ===");
-    // TODO:                 System.out.println(e.getDetalles());
-    // TODO:                 System.out.println("Concierto: Rosalía");
-    // TODO:                 System.out.println("Lugar: Palau Sant Jordi");
-    // TODO:                 System.out.println("====================\n");
-    // TODO:                 return;
-    // TODO:             }
-    // TODO:         }
-    // TODO:         System.out.println("❌ Entrada no encontrada");
-    // TODO:     } catch (NumberFormatException e) {
-    // TODO:         System.out.println("❌ ID debe ser un número");
-    // TODO:     }
-    // TODO: }
+    // ¿PASO A PASO?
+    // 1. Pedir ID con Integer.parseInt()
+    // 2. For-each: for (Entrada e : concierto.getEntradas())
+    // 3. if (e.getId() == id) - comparar si es la buscada
+    // 4. Si encuentra: mostrar ticket bonito y return
+    // 5. Si no encuentra después del loop: mostrar "no encontrada"
+    // 6. catch NumberFormatException si usuario escribe texto
+    //
+    private static void generarTicket(Concierto concierto, Scanner scanner) {
+        System.out.print("ID de entrada: ");
+        try {
+            int id = Integer.parseInt(scanner.nextLine());
+            for (Entrada e : concierto.getEntradas()) {
+                if (e.getId() == id) {
+                    System.out.println("\n🎫 === TICKET ===");
+                    System.out.println(e.getDetalles());
+                    System.out.println("Concierto: Rosalía");
+                    System.out.println("Lugar: Palau Sant Jordi");
+                    System.out.println("====================\n");
+                    return;
+                }
+            }
+            System.out.println("❌ Entrada no encontrada");
+        } catch (NumberFormatException e) {
+            System.out.println("❌ ID debe ser un número");
+        }
+    }
 }
