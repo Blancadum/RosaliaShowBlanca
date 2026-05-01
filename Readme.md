@@ -65,12 +65,106 @@ java Main
 
 ```
 1. Ver mapa de asientos (✅ disponible, ❌ vendida)
-2. Comprar entrada (A-J, 0-7, nombre)
-3. Ver mis entradas (lista todas las compras)
-4. Cancelar entrada (por ID)
-5. Ver estadísticas (% ocupación, recaudación)
-6. Generar ticket (mostrar recibo bonito de entrada)
-7. Salir
+2. Ver precios (tabla de precios por sección)
+3. Comprar entrada (A-J, 0-7, nombre)
+4. Ver mis entradas (lista todas las compras)
+5. Cancelar entrada (por ID)
+6. Ver estadísticas (% ocupación, recaudación)
+7. Generar ticket (mostrar recibo bonito de entrada)
+8. Salir
+```
+
+## 💰 Tabla de Precios
+
+| Sección | Filas | Precio |
+|---------|-------|--------|
+| VIP | A-B | 85.00€ |
+| Premium | C-E | 65.00€ |
+| Normal | F-J | 45.00€ |
+
+## 👨‍💻 Trabajo con Git y GitHub
+
+### ⚠️ Archivos a NO subir
+- **`.class`** (compilados) → Crear `.gitignore` con `*.class`
+- Solo se suben los `.java` (código fuente)
+- Los `.class` se regeneran con `javac`
+
+### Crear `.gitignore`
+```bash
+echo "*.class" > .gitignore
+```
+
+### Opción 1️⃣: Subir tu proyecto nuevo
+
+```bash
+git init
+git config user.name "Tu Nombre"
+git config user.email "tu@email.com"
+
+git add *.java README.md .gitignore
+git commit -m "Initial commit: sistema de entradas Rosalía"
+
+git remote add origin https://github.com/usuario/repositorio.git
+git branch -M main
+git push -u origin main
+```
+
+### Opción 2️⃣: Hacer Fork de un proyecto existente
+
+**¿Cuándo hacer fork?**
+- Quieres contribuir a un proyecto de otra persona
+- Quieres tener tu propia versión del proyecto
+- No tienes permisos de escritura en el repo original
+
+**Pasos:**
+
+1. **Haz fork en GitHub** (botón "Fork" en la esquina superior)
+   - Esto crea una copia en tu cuenta: `github.com/TU-USUARIO/nombre-repo`
+
+2. **Clona TU fork (no el original)**
+   ```bash
+   git clone https://github.com/TU-USUARIO/nombre-repo.git
+   cd nombre-repo
+   ```
+
+3. **Agrega el repo original como "upstream" (opcional pero recomendado)**
+   ```bash
+   git remote add upstream https://github.com/usuario-original/nombre-repo.git
+   ```
+
+4. **Crea una rama para tu feature**
+   ```bash
+   git switch -b feature/mi-mejora
+   ```
+
+5. **Haz cambios y commits**
+   ```bash
+   git add archivo.java
+   git commit -m "feat: agregar nueva funcionalidad"
+   ```
+
+6. **Sube a TU fork**
+   ```bash
+   git push origin feature/mi-mejora
+   ```
+
+7. **Crea un Pull Request (PR)** en GitHub
+   - GitHub te mostrará un botón para crear PR
+   - Describe qué cambios hiciste y por qué
+
+### Flujo de trabajo habitual
+```bash
+git status              # Ver cambios
+git add archivo.java    # Agregar cambios
+git commit -m "descripción clara"  # Guardar cambios
+git push origin main    # Subir a GitHub
+```
+
+### Actualizar tu fork con cambios del original
+```bash
+git fetch upstream
+git merge upstream/main
+git push origin main
 ```
 
 ## 📖 Evaluación
