@@ -1,7 +1,5 @@
 # 📝 SistemaTicketConcierto - Pasos para Resolver
 
-![Rosalía en Concierto](rosalia.jpg)
-
 Sigue estos pasos para resolver el proyecto. Cada `// TODO:` es un paso.
 
 ---
@@ -165,27 +163,6 @@ Sigue estos pasos para resolver el proyecto. Cada `// TODO:` es un paso.
        throw new IllegalArgumentException("Asiento inválido");
    }
    ```
-
----
-
-## 🧪 Pruebas Unitarias (JUnit + JaCoCo)
-
-El proyecto incluye pruebas unitarias automáticas. Para ejecutarlas:
-
-```bash
-# Ejecutar todas las pruebas
-mvn clean test
-
-# Ver reporte de cobertura
-# Se genera en: target/site/jacoco/index.html
-```
-
-**Qué se prueba:**
-- ✅ Clase `Asiento` → 19 tests
-- ✅ Clase `Entrada` → 18 tests
-- ✅ Clase `Concierto` → 25 tests
-
-**Cobertura esperada:** 80%+
 
 ---
 
